@@ -1,0 +1,87 @@
+# Default values for activemq.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 3
+namespace: default
+
+image:
+  repository: https://registry.hub.docker.com/u/rmohr/activemq/
+  tag: "latest"
+  pullPolicy: IfNotPresent
+
+nameOverride: ""
+fullnameOverride: ""
+
+service:
+  type: LoadBalancer
+  sessionAffinity: ClientIP
+  portList:
+    - name: admin
+      port: 8161
+      targetPort: 8161
+      #nodePort: 31615
+    - name: broker
+      port: 61616
+      targetPort: 61616
+      #nodePort: 31671
+    - name: amqp
+      port: 5672
+      targetPort: 5672
+      #nodePort: 31612
+    - name: stomp
+      port: 61613
+      targetPort: 61613
+      #nodePort: 31882
+    - name: mqtt
+      port: 1883
+      targetPort: 1883
+      #nodePort: 31613
+    - name: websocket
+      port: 61614
+      targetPort: 61614
+      #nodePort: 31161
+    #- name: tcp-metrics
+      #port: 8080
+      #targetPort: 31162
+      #nodePort: 31162
+
+resources:
+   requests:
+      cpu: 1000m
+      memory: 2Gi
+
+secret:
+  registry: myregistrykey
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  hosts:
+    - host: chart-example.local
+      paths: []
+
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #   cpu: 100m
+  #   memory: 128Mi
+  # requests:
+  #   cpu: 100m
+  #   memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
